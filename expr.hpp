@@ -1,3 +1,6 @@
+#ifndef EXPR_HPP
+#define EXPR_HPP
+
 #include <memory>
 
 class Expr
@@ -24,10 +27,7 @@ class AndExpr : public Expr
 public:
     AndExpr( Expr* lhs, Expr* rhs );
 
-    bool Evaluate()
-    {
-	return ( e1->Evaluate() && e2->Evaluate() );
-    }
+    bool Evaluate();
 };
 
 class OrExpr : public Expr
@@ -37,10 +37,7 @@ class OrExpr : public Expr
 
     OrExpr( Expr* lhs, Expr* rhs );
     
-    bool Evaluate()
-    {
-	return ( e1->Evaluate() && e2->Evaluate() );
-    }
+    bool Evaluate();
 };
 
 class NotExpr : public Expr
@@ -49,8 +46,7 @@ class NotExpr : public Expr
 public:
     NotExpr( Expr* ex );
 
-    bool Evaluate()
-    {
-	return ( !e->Evaluate() );
-    }
+    bool Evaluate();
 };
+
+#endif
