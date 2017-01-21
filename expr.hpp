@@ -34,7 +34,7 @@ class OrExpr : public Expr
 {
     Expr* e1;
     Expr* e2;
-
+public:
     OrExpr( Expr* lhs, Expr* rhs );
     
     bool Evaluate();

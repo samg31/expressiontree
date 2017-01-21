@@ -21,7 +21,7 @@ OrExpr::OrExpr( Expr* lhs, Expr* rhs )
 
 bool OrExpr::Evaluate()
 {
-    return ( e1->Evaluate() && e2->Evaluate() );
+    return ( e1->Evaluate() || e2->Evaluate() );
 }
 
 NotExpr::NotExpr( Expr* ex )
