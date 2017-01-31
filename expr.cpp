@@ -1,4 +1,5 @@
 #include "expr.hpp"
+#include <iostream>
 
 Expr::~Expr()
 {
@@ -9,9 +10,18 @@ AndExpr::AndExpr( Expr* lhs, Expr* rhs )
 {
 }
 
-bool AndExpr::Evaluate()
+bool AndExpr::Evaluate( ASTContext& context )
 {
-    return ( e1->Evaluate() && e2->Evaluate() );
+    return ( e1->Evaluate( context ) && e2->Evaluate( context ) );
+}
+
+const Type* AndExpr::Check( ASTContext& context )
+{
+    if( e1->Check( context ) != &context.boolTy )
+	throw( "Expression 1 not of type bool\n" );
+
+    if( e2->Check( context ) != &context.boolTy )
+	throw( "Expression 2 not of type bool\n" );
 }
 
 OrExpr::OrExpr( Expr* lhs, Expr* rhs )
@@ -19,9 +29,18 @@ OrExpr::OrExpr( Expr* lhs, Expr* rhs )
 {
 }
 
-bool OrExpr::Evaluate()
+bool OrExpr::Evaluate( ASTContext& context )
 {
-    return ( e1->Evaluate() || e2->Evaluate() );
+    return ( e1->Evaluate( context ) || e2->Evaluate( context ) );
+}
+
+const Type* OrExpr::Check( ASTContext& context )
+{
+    if( e1->Check( context ) != &context.boolTy )
+	throw( "Expression 1 not of type bool\n" );
+
+    if( e2->Check( context ) != &context.boolTy )
+	throw( "Expression 2 not of type bool\n" );
 }
 
 NotExpr::NotExpr( Expr* ex )
@@ -29,7 +48,13 @@ NotExpr::NotExpr( Expr* ex )
 {
 }
 
-bool NotExpr::Evaluate()
+const Type* NotExpr::Check( ASTContext& context )
 {
-    return ( !e->Evaluate() );
+    if( e->Check( context ) != &context.boolTy )
+	throw( "Expression not of type bool\n" );
+}
+
+bool NotExpr::Evaluate( ASTContext& context )
+{
+    return ( !e->Evaluate( context ) );
 }
