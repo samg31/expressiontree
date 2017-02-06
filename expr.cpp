@@ -10,7 +10,7 @@ AndExpr::AndExpr( Expr* lhs, Expr* rhs )
 {
 }
 
-bool AndExpr::Evaluate( ASTContext& context )
+int AndExpr::Evaluate( ASTContext& context )
 {
     return ( e1->Evaluate( context ) && e2->Evaluate( context ) );
 }
@@ -29,7 +29,7 @@ OrExpr::OrExpr( Expr* lhs, Expr* rhs )
 {
 }
 
-bool OrExpr::Evaluate( ASTContext& context )
+int OrExpr::Evaluate( ASTContext& context )
 {
     return ( e1->Evaluate( context ) || e2->Evaluate( context ) );
 }
@@ -54,7 +54,26 @@ const Type* NotExpr::Check( ASTContext& context )
 	throw( "Expression not of type bool\n" );
 }
 
-bool NotExpr::Evaluate( ASTContext& context )
+int NotExpr::Evaluate( ASTContext& context )
 {
     return ( !e->Evaluate( context ) );
 }
+
+IntExpr::IntExpr( int val )
+	:value( val )
+{
+	if( val > ( ( 2 << 31 ) - 1 ) ||
+		val < ( 2 >> 31 ) )
+		throw( "Integer overflow exception\n" );
+}
+
+int IntExpr::Evaluate( ASTContext& context )
+{
+	return value;
+}
+
+const Type* IntExpr::Check( ASTContext& context )
+{
+	return &context.intTy;
+}
+
