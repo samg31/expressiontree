@@ -1,5 +1,6 @@
 #include "expr.hpp"
 #include <iostream>
+#include <iostream>
 
 Expr::~Expr()
 {
@@ -62,9 +63,9 @@ int NotExpr::Evaluate( ASTContext& context )
 IntExpr::IntExpr( int val )
 	:value( val )
 {
-	if( val > ( ( 2 << 31 ) - 1 ) ||
-		val < ( 2 >> 31 ) )
-		throw( "Integer overflow exception\n" );
+	if( val > ( ( 1 << 31 ) - 1 ) ||
+		val < ( ( 1 >> 31 ) ) )
+		std::cerr << "Integer overflow exception\n";
 }
 
 int IntExpr::Evaluate( ASTContext& context )
@@ -77,3 +78,107 @@ const Type* IntExpr::Check( ASTContext& context )
 	return &context.intTy;
 }
 
+AddExpr::AddExpr( Expr* lhs, Expr* rhs )
+	:e1( lhs ), e2( rhs )
+{
+}
+
+int AddExpr::Evaluate( ASTContext& context )
+{
+	return e1->Evaluate( context )
+		+ e2->Evaluate( context );
+}
+
+const Type* AddExpr::Check( ASTContext& context )
+{
+	if( e1->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 1 is not of type int\n";
+	if( e2->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 2 is not of type int\n";
+}
+
+SubtrExpr::SubtrExpr( Expr* lhs, Expr* rhs )
+	:e1( lhs ), e2( rhs )
+{
+}
+
+int SubtrExpr::Evaluate( ASTContext& context )
+{
+	return e1->Evaluate( context )
+		- e2->Evaluate( context );
+}
+
+const Type* SubtrExpr::Check( ASTContext& context )
+{
+	if( e1->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 1 is not of type int\n";
+	if( e2->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 2 is not of type int\n";
+}
+
+MulExpr::MulExpr( Expr* lhs, Expr* rhs )
+	:e1( lhs ), e2( rhs )
+{
+}
+
+int MulExpr::Evaluate( ASTContext& context )
+{
+	return e1->Evaluate( context )
+		* e2->Evaluate( context );
+}
+
+const Type* MulExpr::Check( ASTContext& context )
+{
+	if( e1->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 1 is not of type int\n";
+	if( e2->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 2 is not of type int\n";
+}
+
+DivExpr::DivExpr( Expr* lhs, Expr* rhs )
+	:e1( lhs ), e2( rhs )
+{
+}
+
+int DivExpr::Evaluate( ASTContext& context )
+{
+	return e1->Evaluate( context )
+		/ e2->Evaluate( context );
+}
+
+const Type* DivExpr::Check( ASTContext& context )
+{
+	if( e1->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 1 is not of type int\n";
+	if( e2->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 2 is not of type int\n";
+}
+
+RemExpr::RemExpr( Expr* lhs, Expr* rhs )
+	:e1( lhs ), e2( rhs )
+{
+}
+
+int RemExpr::Evaluate( ASTContext& context )
+{
+	return e1->Evaluate( context )
+		% e2->Evaluate( context );
+}
+
+const Type* RemExpr::Check( ASTContext& context )
+{
+	if( e1->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 1 is not of type int\n";
+	if( e2->Check( context ) != &context.intTy )
+		std::cerr <<
+			"Type Exception: expression 2 is not of type int\n";
+}

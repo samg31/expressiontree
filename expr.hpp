@@ -2,6 +2,7 @@
 #define EXPR_HPP
 
 #include "astcontext.hpp"
+#include "value.hpp"
 
 class Expr
 {
@@ -76,4 +77,46 @@ public:
 	int Evaluate( ASTContext& context ) override;
 	const Type* Check( ASTContext& context ) override;
 };
+
+class SubtrExpr : public Expr
+{
+	Expr* e1;
+	Expr* e2;
+public:
+	SubtrExpr( Expr* lhs, Expr* rhs );
+	int Evaluate( ASTContext& context ) override;
+	const Type* Check( ASTContext& context ) override;
+};
+
+class MulExpr : public Expr
+{
+	Expr* e1;
+	Expr* e2;
+public:
+	MulExpr( Expr* lhs, Expr* rhs );
+	int Evaluate( ASTContext& context ) override;
+	const Type* Check( ASTContext& context ) override;
+};
+
+class DivExpr : public Expr
+{
+	Expr* e1;
+	Expr* e2;
+public:
+	DivExpr( Expr* lhs, Expr* rhs );
+	int Evaluate( ASTContext& context ) override;
+	const Type* Check( ASTContext& context ) override;
+};
+
+class RemExpr : public Expr
+{
+	Expr* e1;
+	Expr* e2;
+public:
+	RemExpr( Expr* lhs, Expr* rhs );
+	int Evaluate( ASTContext& context ) override;
+	const Type* Check( ASTContext& context ) override;
+};
+
 #endif
+
