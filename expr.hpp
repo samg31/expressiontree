@@ -14,16 +14,13 @@ public:
 
 // BOOLEAN EXPRESSIONS
 
-class TrueExpr : public Expr
+class BoolExpr : public Expr
 {
-    int Evaluate( ASTContext& context ) override { return 1; }
+	int value;
+public:
+	BoolExpr( int val ):value(val){}
+    int Evaluate( ASTContext& context ) override { return value; }
     const Type* Check( ASTContext& context ) override { return &context.boolTy; }    
-};
-
-class FalseExpr : public Expr
-{
-    int Evaluate( ASTContext& context ) override { return 0; }
-    const Type* Check( ASTContext& context ) override { return &context.boolTy; }
 };
 
 class AndExpr : public Expr
