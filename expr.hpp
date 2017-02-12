@@ -2,7 +2,6 @@
 #define EXPR_HPP
 
 #include "astcontext.hpp"
-#include "value.hpp"
 
 class Expr
 {
@@ -18,7 +17,7 @@ class BoolExpr : public Expr
 {
 	int value;
 public:
-	BoolExpr( int val ):value(val){}
+    BoolExpr( int val ):value(val){}
     int Evaluate( ASTContext& context ) override { return value; }
     const Type* Check( ASTContext& context ) override { return &context.boolTy; }    
 };
@@ -45,11 +44,34 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
+class XorExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    XorExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+};
+
 class NotExpr : public Expr
 {
     Expr* e;
 public:
     NotExpr( Expr* ex );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+};
+
+class ConditionalExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+    Expr* e3;
+public:
+    ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else );
 
     int Evaluate( ASTContext& context ) override;
     const Type* Check( ASTContext& context ) override;
@@ -61,8 +83,19 @@ class IntExpr : public Expr
 	int value;
 public:
 	IntExpr( int val );
-	int Evaluate( ASTContext& context ) override;
-	const Type* Check( ASTContext& context ) override;
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+};
+
+class NegativeExpr : public Expr
+{
+    Expr* e1;
+public:
+    NegativeExpr( Expr* ex );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
 };
 
 class AddExpr : public Expr
