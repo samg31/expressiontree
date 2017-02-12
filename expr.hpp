@@ -77,6 +77,29 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
+class OrElseExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    OrElseExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+};
+
+class AndThenExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+    Expr* e3;
+public:
+    AndThenExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+};
+
 // INTEGER EXPRESSIONS
 class IntExpr : public Expr
 {
@@ -148,5 +171,75 @@ public:
 	const Type* Check( ASTContext& context ) override;
 };
 
+class EqualExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    EqualExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;  
+};
+
+class NotEqualExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    NotEqualExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;  
+};
+
+class LessExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    LessExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+
+};
+
+class GreaterExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    GreaterExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+
+};
+
+class LessEqualExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    LessEqualExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+
+};
+
+class GreaterEqualExpr : public Expr
+{
+    Expr* e1;
+    Expr* e2;
+public:
+    GreaterEqualExpr( Expr* lhs, Expr* rhs );
+
+    int Evaluate( ASTContext& context ) override;
+    const Type* Check( ASTContext& context ) override;
+
+};
+    
 #endif
 
