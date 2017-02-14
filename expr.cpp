@@ -1,14 +1,25 @@
 #include "expr.hpp"
 #include <iostream>
-#include <iostream>
+#include <cassert>
 
 Expr::~Expr()
 {
 }
 
-AndExpr::AndExpr( Expr* lhs, Expr* rhs )
+AndExpr::AndExpr( Expr* lhs, Expr* rhs, ASTContext& context )
     :e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 1 not of type bool\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 2 not of type bool\n";
+		assert( false );
+	}
 }
 
 int AndExpr::Evaluate( ASTContext& context )
@@ -18,16 +29,23 @@ int AndExpr::Evaluate( ASTContext& context )
 
 const Type* AndExpr::Check( ASTContext& context )
 {
-    if( e1->Check( context ) != &context.boolTy )
-	throw( "Expression 1 not of type bool\n" );
-
-    if( e2->Check( context ) != &context.boolTy )
-	throw( "Expression 2 not of type bool\n" );
+	return e1->Check( context );	
 }
 
-OrExpr::OrExpr( Expr* lhs, Expr* rhs )
+OrExpr::OrExpr( Expr* lhs, Expr* rhs, ASTContext& context )
     :e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 1 not of type bool\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 2 not of type bool\n";
+		assert( false );
+	}	
 }
 
 int OrExpr::Evaluate( ASTContext& context )
@@ -37,16 +55,23 @@ int OrExpr::Evaluate( ASTContext& context )
 
 const Type* OrExpr::Check( ASTContext& context )
 {
-    if( e1->Check( context ) != &context.boolTy )
-	throw( "Expression 1 not of type bool\n" );
-
-    if( e2->Check( context ) != &context.boolTy )
-	throw( "Expression 2 not of type bool\n" );
+	return e1->Check( context );
 }
 
-XorExpr::XorExpr( Expr* lhs, Expr* rhs )
+XorExpr::XorExpr( Expr* lhs, Expr* rhs, ASTContext& context )
     :e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 1 not of type bool\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 2 not of type bool\n";
+		assert( false );
+	}
 }
 
 int XorExpr::Evaluate( ASTContext& context )
@@ -56,23 +81,23 @@ int XorExpr::Evaluate( ASTContext& context )
 
 const Type* XorExpr::Check( ASTContext& context )
 {
-    if( e1->Check( context ) != &context.boolTy )
-	throw( "Expression 1 not of type bool\n" );
-
-    if( e2->Check( context ) != &context.boolTy )
-	throw( "Expression 2 not of type bool\n" );
+	return e1->Check( context );
 }
 
 
-NotExpr::NotExpr( Expr* ex )
+NotExpr::NotExpr( Expr* ex, ASTContext& context )
     :e( ex )
 {
+	if( ex->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression not of type bool\n";
+		assert( false );
+	}
 }
 
 const Type* NotExpr::Check( ASTContext& context )
 {
-    if( e->Check( context ) != &context.boolTy )
-	throw( "Expression not of type bool\n" );
+    return e->Check( context );
 }
 
 int NotExpr::Evaluate( ASTContext& context )
@@ -80,9 +105,20 @@ int NotExpr::Evaluate( ASTContext& context )
     return ( !e->Evaluate( context ) );
 }
 
-ConditionalExpr::ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else )
+ConditionalExpr::ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
     :e1(ex_if), e2(ex_then), e3(ex_else)
 {
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Conditional expression not of type bool\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != e3->Check( context ) )
+	{
+		std::cerr << "Resultant expressions not of same type\n";
+		assert( false );
+	}
 }
 
 int ConditionalExpr::Evaluate( ASTContext& context )
@@ -92,14 +128,10 @@ int ConditionalExpr::Evaluate( ASTContext& context )
 
 const Type* ConditionalExpr::Check( ASTContext& context )
 {
-    if( e1->Check( context ) != &context.boolTy )
-	std::cerr << "Conditional expression not of type bool.\n";
-
-    if( e2->Check( context ) != e3->Check( context ) )
-	std::cerr << "Outcomes of a conditional must be of the same type.\n";
+	return e2->Check( context );
 }
 
-OrElseExpr::OrElseExpr( Expr* lhs, Expr* rhs )
+OrElseExpr::OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context )
     :e1(lhs), e2(rhs)
 {
 }
@@ -109,13 +141,25 @@ int OrElseExpr::Evaluate( ASTContext& context )
     return e2->Evaluate( context );
 }
 
-const Type* Check( ASTContext& context )
+const Type* OrElseExpr::Check( ASTContext& context )
 {
+	return e2->Check( context );	
 }
 
-AndThenExpr::AndThenExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else )
+AndThenExpr::AndThenExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
     :e1(ex_if), e2(ex_then), e3(ex_else)
 {
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Conditional expression not of type bool\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != e3->Check( context ) )
+	{
+		std::cerr << "Resultant expressions not of same type\n";
+		assert( false );
+	}
 }
 
 int AndThenExpr::Evaluate( ASTContext& context )
@@ -125,16 +169,12 @@ int AndThenExpr::Evaluate( ASTContext& context )
 
 const Type* AndThenExpr::Check( ASTContext& context )
 {
-    if( e1->Check( context ) != &context.boolTy )
-	std::cerr << "Conditional expression not of type bool.\n";
-
-    if( e2->Check( context ) != e3->Check( context ) )
-	std::cerr << "Outcomes of a conditional must be of the same type.\n";
+	return e2->Check( context );
 }
 
 
 
-IntExpr::IntExpr( int val )
+IntExpr::IntExpr( int val, ASTContext& context )
 	:value( val )
 {
 	if( val > ( ( 1 << 31 ) - 1 ) ||
@@ -152,9 +192,14 @@ const Type* IntExpr::Check( ASTContext& context )
 	return &context.intTy;
 }
 
-NegativeExpr::NegativeExpr( Expr* ex )
+NegativeExpr::NegativeExpr( Expr* ex, ASTContext& context )
     :e1( ex )
 {
+	if( ex->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Negation of non-int type\n";
+		assert( false );
+	}
 }
 
 int NegativeExpr::Evaluate( ASTContext& context )
@@ -164,12 +209,23 @@ int NegativeExpr::Evaluate( ASTContext& context )
 
 const Type* NegativeExpr::Check( ASTContext& context )
 {
-    return e1->Check( context );
+	return e1->Check( context );
 }
 
-AddExpr::AddExpr( Expr* lhs, Expr* rhs )
+AddExpr::AddExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int AddExpr::Evaluate( ASTContext& context )
@@ -180,17 +236,23 @@ int AddExpr::Evaluate( ASTContext& context )
 
 const Type* AddExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return e1->Check( context );
 }
 
-SubtrExpr::SubtrExpr( Expr* lhs, Expr* rhs )
+SubtrExpr::SubtrExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int SubtrExpr::Evaluate( ASTContext& context )
@@ -201,17 +263,23 @@ int SubtrExpr::Evaluate( ASTContext& context )
 
 const Type* SubtrExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return e1->Check( context );
 }
 
-MulExpr::MulExpr( Expr* lhs, Expr* rhs )
+MulExpr::MulExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int MulExpr::Evaluate( ASTContext& context )
@@ -222,17 +290,23 @@ int MulExpr::Evaluate( ASTContext& context )
 
 const Type* MulExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return e1->Check( context );
 }
 
-DivExpr::DivExpr( Expr* lhs, Expr* rhs )
+DivExpr::DivExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int DivExpr::Evaluate( ASTContext& context )
@@ -243,17 +317,23 @@ int DivExpr::Evaluate( ASTContext& context )
 
 const Type* DivExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return e1->Check( context );
 }
 
-RemExpr::RemExpr( Expr* lhs, Expr* rhs )
+RemExpr::RemExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int RemExpr::Evaluate( ASTContext& context )
@@ -264,17 +344,17 @@ int RemExpr::Evaluate( ASTContext& context )
 
 const Type* RemExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return e1->Check( context );
 }
 
-EqualExpr::EqualExpr( Expr* lhs, Expr* rhs )
+EqualExpr::EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != e2->Check( context ) )
+	{
+		std::cerr << "Operands must be of the same type\n";
+		assert( false );
+	}
 }
 
 int EqualExpr::Evaluate( ASTContext& context )
@@ -285,17 +365,17 @@ int EqualExpr::Evaluate( ASTContext& context )
 
 const Type* EqualExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
-NotEqualExpr::NotEqualExpr( Expr* lhs, Expr* rhs )
+NotEqualExpr::NotEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != e2->Check( context ) )
+	{
+		std::cerr << "Operands must be of the same type\n";
+		assert( false );
+	}	
 }
 
 int NotEqualExpr::Evaluate( ASTContext& context )
@@ -306,17 +386,23 @@ int NotEqualExpr::Evaluate( ASTContext& context )
 
 const Type* NotEqualExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
-LessExpr::LessExpr( Expr* lhs, Expr* rhs )
+LessExpr::LessExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int LessExpr::Evaluate( ASTContext& context )
@@ -327,17 +413,23 @@ int LessExpr::Evaluate( ASTContext& context )
 
 const Type* LessExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
-GreaterExpr::GreaterExpr( Expr* lhs, Expr* rhs )
+GreaterExpr::GreaterExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
 }
 
 int GreaterExpr::Evaluate( ASTContext& context )
@@ -348,17 +440,24 @@ int GreaterExpr::Evaluate( ASTContext& context )
 
 const Type* GreaterExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
-LessEqualExpr::LessEqualExpr( Expr* lhs, Expr* rhs )
+LessEqualExpr::LessEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
+	
 }
 
 int LessEqualExpr::Evaluate( ASTContext& context )
@@ -369,17 +468,24 @@ int LessEqualExpr::Evaluate( ASTContext& context )
 
 const Type* LessEqualExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
-GreaterEqualExpr::GreaterEqualExpr( Expr* lhs, Expr* rhs )
+GreaterEqualExpr::GreaterEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e1->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 1 not of type int\n";
+		assert( false );
+	}
+
+    if( e2->Check( context ) != &context.intTy )
+	{
+		std::cerr << "Expression 2 not of type int\n";
+		assert( false );
+	}	
+
 }
 
 int GreaterEqualExpr::Evaluate( ASTContext& context )
@@ -390,11 +496,6 @@ int GreaterEqualExpr::Evaluate( ASTContext& context )
 
 const Type* GreaterEqualExpr::Check( ASTContext& context )
 {
-	if( e1->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 1 is not of type int\n";
-	if( e2->Check( context ) != &context.intTy )
-		std::cerr <<
-			"Type Exception: expression 2 is not of type int\n";
+	return &context.boolTy;
 }
 
