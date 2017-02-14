@@ -179,7 +179,10 @@ IntExpr::IntExpr( int val, ASTContext& context )
 {
 	if( val > ( ( 1 << 31 ) - 1 ) ||
 		val < ( ( 1 >> 31 ) ) )
+	{
 		std::cerr << "Integer overflow exception\n";
+		assert( false );
+	}
 }
 
 int IntExpr::Evaluate( ASTContext& context )
@@ -296,6 +299,12 @@ const Type* MulExpr::Check( ASTContext& context )
 DivExpr::DivExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e2->Evaluate( context ) == 0 )
+	{
+		std::cerr << "Division by zero\n";
+		assert( false );
+	}
+	
 	if( e1->Check( context ) != &context.intTy )
 	{
 		std::cerr << "Expression 1 not of type int\n";
@@ -323,6 +332,12 @@ const Type* DivExpr::Check( ASTContext& context )
 RemExpr::RemExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	:e1( lhs ), e2( rhs )
 {
+	if( e2->Evaluate( context ) == 0 )
+	{
+		std::cerr << "Division by zero\n";
+		assert( false );
+	}
+	
 	if( e1->Check( context ) != &context.intTy )
 	{
 		std::cerr << "Expression 1 not of type int\n";
