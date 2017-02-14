@@ -8,6 +8,10 @@ int main()
 {
     ASTContext context;
 
+	Expr* t = new BoolExpr( true );
+    Expr* f = new BoolExpr( false );
+	Expr* zero = new IntExpr( 0, context );
+	
     Expr* e1 = new IntExpr( 10, context );
     Expr* e2 = new IntExpr( 10, context );
     Expr* e3 = new AddExpr( e1, e2, context );
@@ -16,8 +20,6 @@ int main()
     Expr* e6 = new DivExpr( e1, e2, context );    
     Expr* e7 = new RemExpr( e1, e2, context );
 
-    Expr* t = new BoolExpr( true );
-    Expr* f = new BoolExpr( false );
     Expr* e8 = new XorExpr( t, t, context );
     Expr* e9 = new OrExpr( t, t, context );
     Expr* e10 = new ConditionalExpr( f, e8, e9, context );
@@ -29,7 +31,13 @@ int main()
     Expr* e15 = new GreaterEqualExpr( e1, e2, context );
     Expr* e16 = new EqualExpr( e1, e2, context );
     Expr* e17 = new NotEqualExpr( e1, e2, context );
-    
+
+	// Commented declarations will fail at runtime
+  	// Expr* bad1 = new IntExpr( 203309430493409340, context );
+	// Expr* bad2 = new AddExpr( t, e1, context );
+	// Expr* bad3 = new DivExpr( e1, zero, context );
+	// Expr* bad4 = new AndExpr( t, e1, context );
+	// Expr* bad5 = new EqualExpr( t, e1, context );    
 
     std::cout << e3->Evaluate( context ) << '\n';
     std::cout << e4->Evaluate( context ) << '\n';
