@@ -9,6 +9,8 @@ class OrExpr;
 class XorExpr;
 class NotExpr;
 class ConditionalExpr;
+class OrElseExpr;
+class AndThenExpr;
 
 class Expr
 {
@@ -27,6 +29,8 @@ struct Expr::Visitor
     virtual void visit( XorExpr* ) = 0;
     virtual void visit( NotExpr* ) = 0;
     virtual void visit( ConditionalExpr* ) = 0;
+    virtual void visit( OrElseExpr* ) = 0;
+    virtual void visit( AndThenExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -97,28 +101,28 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
-// class OrElseExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class OrElseExpr : public Expr
+{
+public:
+    Expr* e1;
+    Expr* e2;
+    OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
-// };
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
-// class AndThenExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-//     Expr* e3;
-// public:
-//     AndThenExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context );
+class AndThenExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
-// };
+    AndThenExpr( Expr* ex_if, Expr* ex_then, ASTContext& context );
+
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
 // // INTEGER EXPRESSIONS
 // class IntExpr : public Expr

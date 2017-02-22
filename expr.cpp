@@ -132,48 +132,45 @@ const Type* ConditionalExpr::Check( ASTContext& context )
 	return e2->Check( context );
 }
 
-// OrElseExpr::OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-//     :e1(lhs), e2(rhs)
-// {
-// }
+OrElseExpr::OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1(lhs), e2(rhs)
+{
+}
 
-// int OrElseExpr::Evaluate( ASTContext& context )
-// {
-//     return e2->Evaluate( context );
-// }
+void OrElseExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* OrElseExpr::Check( ASTContext& context )
-// {
-// 	return e2->Check( context );	
-// }
+const Type* OrElseExpr::Check( ASTContext& context )
+{
+	return e2->Check( context );	
+}
 
-// AndThenExpr::AndThenExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
-//     :e1(ex_if), e2(ex_then), e3(ex_else)
-// {
-// 	if( e1->Check( context ) != &context.boolTy )
-// 	{
-// 		std::cerr << "Conditional expression not of type bool\n";
-// 		assert( false );
-// 	}
+AndThenExpr::AndThenExpr( Expr* ex_if, Expr* ex_then, ASTContext& context )
+    :e1(ex_if), e2(ex_then)
+{
+    if( e1->Check( context ) != &context.boolTy )
+    {
+	std::cerr << "Expression 1 not of type bool\n";
+	assert( false );
+    }
+    if( e2->Check( context ) != &context.boolTy )
+    {
+	std::cerr << "Expression 2 not of type bool\n";
+	assert( false );
+    }
+}
 
-//     if( e2->Check( context ) != e3->Check( context ) )
-// 	{
-// 		std::cerr << "Resultant expressions not of same type\n";
-// 		assert( false );
-// 	}
-// }
+void AndThenExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// int AndThenExpr::Evaluate( ASTContext& context )
-// {
-//     return ( e1->Evaluate( context ) ) ? e2->Evaluate( context ) : e3->Evaluate( context );
-// }
-
-// const Type* AndThenExpr::Check( ASTContext& context )
-// {
-// 	return e2->Check( context );
-// }
-
-
+const Type* AndThenExpr::Check( ASTContext& context )
+{
+	return e2->Check( context );
+}
 
 // IntExpr::IntExpr( int val, ASTContext& context )
 // 	:value( val )
