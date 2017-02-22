@@ -10,7 +10,6 @@ class Expr
 {
 public:    
     struct Visitor;
-    virtual int Evaluate( ASTContext& context ) = 0;
     virtual const Type* Check( ASTContext& context ) = 0;
     virtual void Accept( Visitor& ) = 0;
     virtual ~Expr();
@@ -29,7 +28,6 @@ class BoolExpr : public Expr
 public:    
     int value;
     BoolExpr( int val ):value(val){}
-    int Evaluate( ASTContext& context ) override { return value; }
     const Type* Check( ASTContext& context ) override { return &context.boolTy; }
     void Accept( Visitor& v ) { v.visit( this ); }
 };
@@ -41,7 +39,6 @@ public:
     Expr* e2;
     AndExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-    int Evaluate( ASTContext& context ) override;
     const Type* Check( ASTContext& context ) override;
     void Accept( Visitor& v );
 };

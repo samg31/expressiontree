@@ -23,11 +23,6 @@ AndExpr::AndExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 	}
 }
 
-int AndExpr::Evaluate( ASTContext& context )
-{
-    return ( e1->Evaluate( context ) && e2->Evaluate( context ) );
-}
-
 const Type* AndExpr::Check( ASTContext& context )
 {
 	return e1->Check( context );	
