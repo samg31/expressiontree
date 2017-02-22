@@ -12,7 +12,7 @@ int main()
     Expr* t = new BoolExpr( true );
     Expr* f = new BoolExpr( false );
 
-    Expr* AndEx = new NotExpr( f, context );
+    Expr* AndEx = new ConditionalExpr( f, f, t, context );
     std::cout << eval( AndEx ) << '\n';
     // Expr* zero = new IntExpr( 0, context );
 	

@@ -14,6 +14,7 @@ int eval( Expr* e )
 	void visit( OrExpr* e ) { r = eval( e->e1 ) | eval( e->e2 ); }
 	void visit( XorExpr* e ) { r = eval( e->e1 ) ^ eval( e->e2 ); }
 	void visit( NotExpr* e ) { r = !eval( e->e1 ); }
+	void visit( ConditionalExpr* e ) { r = eval( e->e1 ) ? eval( e->e2 ) : eval( e->e3 ); }
     };
 
     V vis;

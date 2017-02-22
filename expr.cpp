@@ -106,31 +106,31 @@ void NotExpr::Accept( Visitor& v )
     v.visit( this );
 }
 
-// ConditionalExpr::ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
-//     :e1(ex_if), e2(ex_then), e3(ex_else)
-// {
-// 	if( e1->Check( context ) != &context.boolTy )
-// 	{
-// 		std::cerr << "Conditional expression not of type bool\n";
-// 		assert( false );
-// 	}
+ConditionalExpr::ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
+    :e1(ex_if), e2(ex_then), e3(ex_else)
+{
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Conditional expression not of type bool\n";
+		assert( false );
+	}
 
-//     if( e2->Check( context ) != e3->Check( context ) )
-// 	{
-// 		std::cerr << "Resultant expressions not of same type\n";
-// 		assert( false );
-// 	}
-// }
+    if( e2->Check( context ) != e3->Check( context ) )
+	{
+		std::cerr << "Resultant expressions not of same type\n";
+		assert( false );
+	}
+}
 
-// int ConditionalExpr::Evaluate( ASTContext& context )
-// {
-//     return ( e1->Evaluate( context ) ) ? e2->Evaluate( context ) : false;
-// }
+void ConditionalExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* ConditionalExpr::Check( ASTContext& context )
-// {
-// 	return e2->Check( context );
-// }
+const Type* ConditionalExpr::Check( ASTContext& context )
+{
+	return e2->Check( context );
+}
 
 // OrElseExpr::OrElseExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 //     :e1(lhs), e2(rhs)
