@@ -11,6 +11,7 @@ int eval( Expr* e )
 	int r;
 	void visit( BoolExpr* e ) { r = e->value; }
 	void visit( AndExpr* e ) { r = eval( e->e1 ) & eval( e->e2 ); }
+	void visit( OrExpr* e ) { r = eval( e->e1 ) | eval( e->e2 ); }
     };
 
     V vis;

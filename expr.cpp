@@ -33,31 +33,31 @@ void AndExpr::Accept( Visitor& v )
     v.visit( this );
 }
 
-// OrExpr::OrExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-//     :e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != &context.boolTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type bool\n";
-// 		assert( false );
-// 	}
+OrExpr::OrExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+	if( e1->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 1 not of type bool\n";
+		assert( false );
+	}
 
-//     if( e2->Check( context ) != &context.boolTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type bool\n";
-// 		assert( false );
-// 	}	
-// }
+    if( e2->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression 2 not of type bool\n";
+		assert( false );
+	}	
+}
 
-// int OrExpr::Evaluate( ASTContext& context )
-// {
-//     return ( e1->Evaluate( context ) || e2->Evaluate( context ) );
-// }
+void OrExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* OrExpr::Check( ASTContext& context )
-// {
-// 	return e1->Check( context );
-// }
+const Type* OrExpr::Check( ASTContext& context )
+{
+	return e1->Check( context );
+}
 
 // XorExpr::XorExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 //     :e1( lhs ), e2( rhs )

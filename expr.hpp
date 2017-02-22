@@ -5,6 +5,7 @@
 
 class BoolExpr;
 class AndExpr;
+class OrExpr;
 
 class Expr
 {
@@ -19,6 +20,7 @@ struct Expr::Visitor
 {    
     virtual void visit( BoolExpr* ) = 0;
     virtual void visit( AndExpr* ) = 0;
+    virtual void visit( OrExpr* ) = 0;    
 };
 
 // BOOLEAN EXPRESSIONS
@@ -43,16 +45,16 @@ public:
     void Accept( Visitor& v );
 };
 
-// class OrExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     OrExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class OrExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    OrExpr( Expr* lhs, Expr* rhs, ASTContext& context );
     
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
-// };
+    const Type* Check( ASTContext& context ) override;
+    void Accept( Visitor& v );
+};
 
 // class XorExpr : public Expr
 // {
