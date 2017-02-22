@@ -86,25 +86,25 @@ const Type* XorExpr::Check( ASTContext& context )
 }
 
 
-// NotExpr::NotExpr( Expr* ex, ASTContext& context )
-//     :e( ex )
-// {
-// 	if( ex->Check( context ) != &context.boolTy )
-// 	{
-// 		std::cerr << "Expression not of type bool\n";
-// 		assert( false );
-// 	}
-// }
+NotExpr::NotExpr( Expr* ex, ASTContext& context )
+    :e1( ex )
+{
+	if( ex->Check( context ) != &context.boolTy )
+	{
+		std::cerr << "Expression not of type bool\n";
+		assert( false );
+	}
+}
 
-// const Type* NotExpr::Check( ASTContext& context )
-// {
-//     return e->Check( context );
-// }
+const Type* NotExpr::Check( ASTContext& context )
+{
+    return e1->Check( context );
+}
 
-// int NotExpr::Evaluate( ASTContext& context )
-// {
-//     return ( !e->Evaluate( context ) );
-// }
+void NotExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
 // ConditionalExpr::ConditionalExpr( Expr* ex_if, Expr* ex_then, Expr* ex_else, ASTContext& context )
 //     :e1(ex_if), e2(ex_then), e3(ex_else)
