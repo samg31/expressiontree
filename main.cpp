@@ -11,12 +11,16 @@ int main()
 
     Expr* t = new BoolExpr( true );
     Expr* f = new BoolExpr( false );
+    Expr* zero = new IntExpr( 0, context );    
 
+    Expr* e1 = new IntExpr( 10, context );
+    Expr* e2 = new NegativeExpr( e1, context );
+    Expr* e3 = new IntExpr( 20, context );
+    Expr* e4 = new AddExpr( e2, e3, context );
+    
     Expr* AndEx = new AndThenExpr( t, t, context );
-    std::cout << eval( AndEx ) << '\n';
-    // Expr* zero = new IntExpr( 0, context );
+    std::cout << eval( e4 ) << '\n';
 	
-    // Expr* e1 = new IntExpr( 10, context );
     // Expr* e2 = new IntExpr( 10, context );
     // Expr* e3 = new AddExpr( e1, e2, context );
     // Expr* e4 = new SubtrExpr( e1, e2, context );

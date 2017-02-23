@@ -172,73 +172,72 @@ const Type* AndThenExpr::Check( ASTContext& context )
 	return e2->Check( context );
 }
 
-// IntExpr::IntExpr( int val, ASTContext& context )
-// 	:value( val )
-// {
-// 	if( val > ( ( 1 << 31 ) - 1 ) ||
-// 		val < ( ( 1 >> 31 ) ) )
-// 	{
-// 		std::cerr << "Integer overflow exception\n";
-// 		assert( false );
-// 	}
-// }
+IntExpr::IntExpr( int val, ASTContext& context )
+    :value( val )
+{
+    if( val > ( ( 1 << 31 ) - 1 ) ||
+	val < ( ( 1 >> 31 ) ) )
+    {
+	std::cerr << "Integer overflow exception\n";
+	assert( false );
+    }
+}
 
-// int IntExpr::Evaluate( ASTContext& context )
-// {
-// 	return value;
-// }
+void IntExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* IntExpr::Check( ASTContext& context )
-// {
-// 	return &context.intTy;
-// }
+const Type* IntExpr::Check( ASTContext& context )
+{
+    return &context.intTy;
+}
 
-// NegativeExpr::NegativeExpr( Expr* ex, ASTContext& context )
-//     :e1( ex )
-// {
-// 	if( ex->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Negation of non-int type\n";
-// 		assert( false );
-// 	}
-// }
+NegativeExpr::NegativeExpr( Expr* ex, ASTContext& context )
+    :e1( ex )
+{
+    if( ex->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Negation of non-int type\n";
+	assert( false );
+    }
+}
 
-// int NegativeExpr::Evaluate( ASTContext& context )
-// {
-//     return -e1->Evaluate( context );
-// }
+void NegativeExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* NegativeExpr::Check( ASTContext& context )
-// {
-// 	return e1->Check( context );
-// }
+const Type* NegativeExpr::Check( ASTContext& context )
+{
+    return e1->Check( context );
+}
 
-// AddExpr::AddExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type int\n";
-// 		assert( false );
-// 	}
+AddExpr::AddExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 1 not of type int\n";
+	assert( false );
+    }
 
-//     if( e2->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type int\n";
-// 		assert( false );
-// 	}	
-// }
+    if( e2->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 2 not of type int\n";
+	assert( false );
+    }	
+}
 
-// int AddExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		+ e2->Evaluate( context );
-// }
+void AddExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* AddExpr::Check( ASTContext& context )
-// {
-// 	return e1->Check( context );
-// }
+const Type* AddExpr::Check( ASTContext& context )
+{
+    return e1->Check( context );
+}
 
 // SubtrExpr::SubtrExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 // 	:e1( lhs ), e2( rhs )

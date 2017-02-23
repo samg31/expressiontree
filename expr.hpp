@@ -11,6 +11,9 @@ class NotExpr;
 class ConditionalExpr;
 class OrElseExpr;
 class AndThenExpr;
+class IntExpr;
+class NegativeExpr;
+class AddExpr;
 
 class Expr
 {
@@ -31,6 +34,9 @@ struct Expr::Visitor
     virtual void visit( ConditionalExpr* ) = 0;
     virtual void visit( OrElseExpr* ) = 0;
     virtual void visit( AndThenExpr* ) = 0;
+    virtual void visit( IntExpr* ) = 0;
+    virtual void visit( NegativeExpr* ) = 0;
+    virtual void visit( AddExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -124,36 +130,36 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
-// // INTEGER EXPRESSIONS
-// class IntExpr : public Expr
-// {
-// 	int value;
-// public:
-// 	IntExpr( int val, ASTContext& context );
+// INTEGER EXPRESSIONS
+class IntExpr : public Expr
+{
+public:    
+    int value;
+    IntExpr( int val, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
-// };
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
-// class NegativeExpr : public Expr
-// {
-//     Expr* e1;
-// public:
-//     NegativeExpr( Expr* ex, ASTContext& context );
+class NegativeExpr : public Expr
+{
+public:
+    Expr* e1;
+    NegativeExpr( Expr* ex, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
-// };
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
-// class AddExpr : public Expr
-// {
-// 	Expr* e1;
-// 	Expr* e2;
-// public:
-// 	AddExpr( Expr* lhs, Expr* rhs, ASTContext& context );
-// 	int Evaluate( ASTContext& context ) override;
-// 	const Type* Check( ASTContext& context ) override;
-// };
+class AddExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    AddExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
 // class SubtrExpr : public Expr
 // {
