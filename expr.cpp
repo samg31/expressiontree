@@ -355,74 +355,71 @@ const Type* RemExpr::Check( ASTContext& context )
     return e1->Check( context );
 }
 
-// EqualExpr::EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != e2->Check( context ) )
-// 	{
-// 		std::cerr << "Operands must be of the same type\n";
-// 		assert( false );
-// 	}
-// }
+EqualExpr::EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != e2->Check( context ) )
+    {
+	std::cerr << "Operands must be of the same type\n";
+	assert( false );
+    }
+}
 
-// int EqualExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		== e2->Evaluate( context );
-// }
+void EqualExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* EqualExpr::Check( ASTContext& context )
-// {
-// 	return &context.boolTy;
-// }
+const Type* EqualExpr::Check( ASTContext& context )
+{
+    return &context.boolTy;
+}
 
-// NotEqualExpr::NotEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != e2->Check( context ) )
-// 	{
-// 		std::cerr << "Operands must be of the same type\n";
-// 		assert( false );
-// 	}	
-// }
+NotEqualExpr::NotEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != e2->Check( context ) )
+    {
+	std::cerr << "Operands must be of the same type\n";
+	assert( false );
+    }	
+}
 
-// int NotEqualExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		!= e2->Evaluate( context );
-// }
+void NotEqualExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* NotEqualExpr::Check( ASTContext& context )
-// {
-// 	return &context.boolTy;
-// }
+const Type* NotEqualExpr::Check( ASTContext& context )
+{
+    return &context.boolTy;
+}
 
-// LessExpr::LessExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type int\n";
-// 		assert( false );
-// 	}
+LessExpr::LessExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 1 not of type int\n";
+	assert( false );
+    }
 
-//     if( e2->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type int\n";
-// 		assert( false );
-// 	}	
-// }
+    if( e2->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 2 not of type int\n";
+	assert( false );
+    }	
+}
 
-// int LessExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		< e2->Evaluate( context );
-// }
+void LessExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* LessExpr::Check( ASTContext& context )
-// {
-// 	return &context.boolTy;
-// }
+const Type* LessExpr::Check( ASTContext& context )
+{
+    return &context.boolTy;
+}
 
 // GreaterExpr::GreaterExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 // 	:e1( lhs ), e2( rhs )

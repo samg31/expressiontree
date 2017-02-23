@@ -18,6 +18,9 @@ class SubtrExpr;
 class MulExpr;
 class DivExpr;
 class RemExpr;
+class EqualExpr;
+class NotEqualExpr;
+class LessExpr;
 
 class Expr
 {
@@ -45,6 +48,9 @@ struct Expr::Visitor
     virtual void visit( MulExpr* ) = 0;
     virtual void visit( DivExpr* ) = 0;
     virtual void visit( RemExpr* ) = 0;
+    virtual void visit( EqualExpr* ) = 0;
+    virtual void visit( NotEqualExpr* ) = 0;
+    virtual void visit( LessExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -209,39 +215,39 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
-// class EqualExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class EqualExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;  
-// };
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;  
+};
 
-// class NotEqualExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     NotEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class NotEqualExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    NotEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;  
-// };
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;  
+};
 
-// class LessExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     LessExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class LessExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    LessExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
 
-// };
+};
 
 // class GreaterExpr : public Expr
 // {

@@ -24,6 +24,9 @@ int eval( Expr* e )
 	void visit( MulExpr* e ) { r = eval( e->e1 ) * eval( e->e2 ); }
 	void visit( DivExpr* e ) { r = eval( e->e1 ) / eval( e->e2 ); }
 	void visit( RemExpr* e ) { r = eval( e->e1 ) % eval( e->e2 ); }
+	void visit( EqualExpr* e ) { r = eval( e->e1 ) == eval( e->e2 ); }
+	void visit( NotEqualExpr* e ) { r = eval( e->e1 ) != eval( e->e2 ); }
+	void visit( LessExpr* e ) { r = eval( e->e1 ) < eval( e->e2 ); }
     };
 
     V vis;
