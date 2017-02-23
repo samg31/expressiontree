@@ -14,6 +14,7 @@ class AndThenExpr;
 class IntExpr;
 class NegativeExpr;
 class AddExpr;
+class SubtrExpr;
 
 class Expr
 {
@@ -37,6 +38,7 @@ struct Expr::Visitor
     virtual void visit( IntExpr* ) = 0;
     virtual void visit( NegativeExpr* ) = 0;
     virtual void visit( AddExpr* ) = 0;
+    virtual void visit( SubtrExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -161,15 +163,15 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
-// class SubtrExpr : public Expr
-// {
-// 	Expr* e1;
-// 	Expr* e2;
-// public:
-// 	SubtrExpr( Expr* lhs, Expr* rhs, ASTContext& context );
-// 	int Evaluate( ASTContext& context ) override;
-// 	const Type* Check( ASTContext& context ) override;
-// };
+class SubtrExpr : public Expr
+{
+public:    
+    Expr* e1;
+    Expr* e2;
+    SubtrExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
 // class MulExpr : public Expr
 // {
