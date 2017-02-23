@@ -20,7 +20,8 @@ int eval( Expr* e )
 	void visit( IntExpr* e ) { r = e->value; }
 	void visit( NegativeExpr* e ) { r = -eval( e->e1 ); }
 	void visit( AddExpr* e ) { r = eval( e->e1 ) + eval( e->e2 ); }
-	void visit( SubtrExpr* e ) { r = eval( e->e1 ) - eval( e->e2 ); }	
+	void visit( SubtrExpr* e ) { r = eval( e->e1 ) - eval( e->e2 ); }
+	void visit( MulExpr* e ) { r = eval( e->e1 ) * eval( e->e2 ); }
     };
 
     V vis;

@@ -265,32 +265,31 @@ const Type* SubtrExpr::Check( ASTContext& context )
     return e1->Check( context );
 }
 
-// MulExpr::MulExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type int\n";
-// 		assert( false );
-// 	}
+MulExpr::MulExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 1 not of type int\n";
+	assert( false );
+    }
 
-//     if( e2->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type int\n";
-// 		assert( false );
-// 	}	
-// }
+    if( e2->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 2 not of type int\n";
+	assert( false );
+    }	
+}
 
-// int MulExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		* e2->Evaluate( context );
-// }
+void MulExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* MulExpr::Check( ASTContext& context )
-// {
-// 	return e1->Check( context );
-// }
+const Type* MulExpr::Check( ASTContext& context )
+{
+    return e1->Check( context );
+}
 
 // DivExpr::DivExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 // 	:e1( lhs ), e2( rhs )
