@@ -17,6 +17,7 @@ class AddExpr;
 class SubtrExpr;
 class MulExpr;
 class DivExpr;
+class RemExpr;
 
 class Expr
 {
@@ -43,6 +44,7 @@ struct Expr::Visitor
     virtual void visit( SubtrExpr* ) = 0;
     virtual void visit( MulExpr* ) = 0;
     virtual void visit( DivExpr* ) = 0;
+    virtual void visit( RemExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -197,15 +199,15 @@ public:
     const Type* Check( ASTContext& context ) override;
 };
 
-// class RemExpr : public Expr
-// {
-// 	Expr* e1;
-// 	Expr* e2;
-// public:
-// 	RemExpr( Expr* lhs, Expr* rhs, ASTContext& context );
-// 	int Evaluate( ASTContext& context ) override;
-// 	const Type* Check( ASTContext& context ) override;
-// };
+class RemExpr : public Expr
+{
+public:
+    Expr* e1;
+    Expr* e2;
+    RemExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
+};
 
 // class EqualExpr : public Expr
 // {

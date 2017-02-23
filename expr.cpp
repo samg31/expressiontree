@@ -323,38 +323,37 @@ const Type* DivExpr::Check( ASTContext& context )
     return e1->Check( context );
 }
 
-// RemExpr::RemExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e2->Evaluate( context ) == 0 )
-// 	{
-// 		std::cerr << "Division by zero\n";
-// 		assert( false );
-// 	}
+RemExpr::RemExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    // if( e2->Evaluate( context ) == 0 )
+    // {
+    // 	std::cerr << "Division by zero\n";
+    // 	assert( false );
+    // }
 	
-// 	if( e1->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type int\n";
-// 		assert( false );
-// 	}
+    if( e1->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 1 not of type int\n";
+	assert( false );
+    }
 
-//     if( e2->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type int\n";
-// 		assert( false );
-// 	}	
-// }
+    if( e2->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 2 not of type int\n";
+	assert( false );
+    }	
+}
 
-// int RemExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		% e2->Evaluate( context );
-// }
+void RemExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* RemExpr::Check( ASTContext& context )
-// {
-// 	return e1->Check( context );
-// }
+const Type* RemExpr::Check( ASTContext& context )
+{
+    return e1->Check( context );
+}
 
 // EqualExpr::EqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
 // 	:e1( lhs ), e2( rhs )
