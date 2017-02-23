@@ -21,6 +21,7 @@ class RemExpr;
 class EqualExpr;
 class NotEqualExpr;
 class LessExpr;
+class GreaterExpr;
 
 class Expr
 {
@@ -51,6 +52,7 @@ struct Expr::Visitor
     virtual void visit( EqualExpr* ) = 0;
     virtual void visit( NotEqualExpr* ) = 0;
     virtual void visit( LessExpr* ) = 0;
+    virtual void visit( GreaterExpr* ) = 0;
 };
 
 // BOOLEAN EXPRESSIONS
@@ -249,17 +251,17 @@ public:
 
 };
 
-// class GreaterExpr : public Expr
-// {
-//     Expr* e1;
-//     Expr* e2;
-// public:
-//     GreaterExpr( Expr* lhs, Expr* rhs, ASTContext& context );
+class GreaterExpr : public Expr
+{
+public:
+    Expr* e1;
+    Expr* e2;
+    GreaterExpr( Expr* lhs, Expr* rhs, ASTContext& context );
 
-//     int Evaluate( ASTContext& context ) override;
-//     const Type* Check( ASTContext& context ) override;
+    void Accept( Visitor& v );
+    const Type* Check( ASTContext& context ) override;
 
-// };
+};
 
 // class LessEqualExpr : public Expr
 // {

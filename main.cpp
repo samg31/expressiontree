@@ -16,7 +16,7 @@ int main()
     Expr* e1 = new IntExpr( 10, context );
     Expr* e2 = new NegativeExpr( e1, context );
     Expr* e3 = new IntExpr( 20, context );
-    Expr* e4 = new LessExpr( e2, e1, context );
+    Expr* e4 = new GreaterExpr( e1, e2, context );
     
     Expr* AndEx = new AndThenExpr( t, t, context );
     std::cout << eval( e4 ) << '\n';
