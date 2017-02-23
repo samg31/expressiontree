@@ -22,6 +22,7 @@ int eval( Expr* e )
 	void visit( AddExpr* e ) { r = eval( e->e1 ) + eval( e->e2 ); }
 	void visit( SubtrExpr* e ) { r = eval( e->e1 ) - eval( e->e2 ); }
 	void visit( MulExpr* e ) { r = eval( e->e1 ) * eval( e->e2 ); }
+	void visit( DivExpr* e ) { r = eval( e->e1 ) / eval( e->e2 ); }
     };
 
     V vis;
