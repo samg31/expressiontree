@@ -29,6 +29,7 @@ int eval( Expr* e )
 	void visit( LessExpr* e ) { r = eval( e->e1 ) < eval( e->e2 ); }
 	void visit( GreaterExpr* e ) { r = eval( e->e1 ) > eval( e->e2 ); }
 	void visit( LessEqualExpr* e ) { r = eval( e->e1 ) <= eval( e->e2 ); }
+	void visit( GreaterEqualExpr* e ) { r = eval( e->e1 ) >= eval( e->e2 ); }
     };
 
     V vis;

@@ -474,30 +474,29 @@ const Type* LessEqualExpr::Check( ASTContext& context )
     return &context.boolTy;
 }
 
-// GreaterEqualExpr::GreaterEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
-// 	:e1( lhs ), e2( rhs )
-// {
-// 	if( e1->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 1 not of type int\n";
-// 		assert( false );
-// 	}
+GreaterEqualExpr::GreaterEqualExpr( Expr* lhs, Expr* rhs, ASTContext& context )
+    :e1( lhs ), e2( rhs )
+{
+    if( e1->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 1 not of type int\n";
+	assert( false );
+    }
 
-//     if( e2->Check( context ) != &context.intTy )
-// 	{
-// 		std::cerr << "Expression 2 not of type int\n";
-// 		assert( false );
-// 	}	
+    if( e2->Check( context ) != &context.intTy )
+    {
+	std::cerr << "Expression 2 not of type int\n";
+	assert( false );
+    }	
 
-// }
+}
 
-// int GreaterEqualExpr::Evaluate( ASTContext& context )
-// {
-// 	return e1->Evaluate( context )
-// 		>= e2->Evaluate( context );
-// }
+void GreaterEqualExpr::Accept( Visitor& v )
+{
+    v.visit( this );
+}
 
-// const Type* GreaterEqualExpr::Check( ASTContext& context )
-// {
-// 	return &context.boolTy;
-// }
+const Type* GreaterEqualExpr::Check( ASTContext& context )
+{
+    return &context.boolTy;
+}
