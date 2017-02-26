@@ -1,6 +1,7 @@
 #include "expr.hpp"
 #include "astcontext.hpp"
 #include "eval.hpp"
+#include "check.hpp"
 
 #include <memory>
 #include <iostream>
@@ -9,7 +10,10 @@ int main()
 {
     ASTContext context;
 
+    std::cout << &context.boolTy << '\n';
+
     Expr* t = new BoolExpr( true );
+    std::cout << check( t, context ) << '\n';    
     Expr* f = new BoolExpr( false );
     Expr* zero = new IntExpr( 0, context );    
 
