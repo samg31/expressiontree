@@ -61,17 +61,82 @@ struct Lexer
 		r = new RParenToken;
 		break;
 	    case '&':
-		r = new AmprsndToken;
+		if( LookAhead() == '&' )
+		{
+		    Consume();
+		    r = new AmprsndToken;
+		}
 		break;
 	    case '|':
-		r = new BarToken;
+		if( LookAhead() == '|' )
+		{
+		    Consume();
+		    r = new BarToken;
+		}
 		break;
 	    case '^':
 		r = new CaretToken;
 		break;
 	    case '!':
+		if( LookAhead() == '=' )
+		{
+		    Consume();
+		    // r = new ExclmEqToken;
+		}
 		r = new ExclmToken;
 		break;
+	    case '+':
+		r = new PlusToken;
+		break;
+	    case '-':
+		r = new MinusToken;
+		break;
+	    case '*':
+		r = new AstrxToken;
+		break;
+	    case '/':
+		r = new SlashToken;
+		break;
+	    case '%':
+		r = new PrcntToken;
+		break;
+	    case '?':
+		r = new QuestionToken;
+		break;
+	    case ':':
+		r = new ColonToken;
+		break;
+	    case '<':
+		if( LookAhead() == '=' )
+		{
+		    Consume();
+		    r = new LessEqToken;
+		}
+		else
+		    r = new LessToken;
+		break;
+	    case '>':
+		if( LookAhead() == '=' )
+		{
+		    Consume();
+		    r = new GreaterEqToken;
+		}
+		else
+		    r = new GreaterToken;
+		break;
+	    case '=':
+		if( LookAhead() == '=' )
+		{
+		    Consume();
+		    r = new EqualToken;
+		}
+		break;
+	    case 't':
+		break;
+	    case ' ':
+	    case '\t':
+	    case '\n':
+		Consume();
 	    }
 	}
 	return r;
