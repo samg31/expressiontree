@@ -131,6 +131,11 @@ struct Lexer
 		    r = new EqualToken;
 		}
 		break;
+	    case '#':
+		while( LookAhead() != '\n' )
+		{
+		    Consume();
+		}
 	    case 't':
 		break;
 	    case ' ':
