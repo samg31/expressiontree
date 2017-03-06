@@ -44,6 +44,7 @@ struct Lexer
 	    case '7':
 	    case '8':
 	    case '9':
+	    {
 		do
 		{
 		    Consume();
@@ -51,6 +52,7 @@ struct Lexer
 		int n = std::stoi( buf );
 		r = new IntToken( n );
 		std::cout << n << '\n';
+	    }
 		break;
 	    case '(':
 		r = new LParenToken;
