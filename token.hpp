@@ -10,9 +10,22 @@ enum TokenKind
     BAR,
     CARET,
     EXCLM,
+    EXCLMEQ,    
     INT,
     TRUE,
-    FALSE
+    FALSE,
+    EQUAL,
+    LESS,
+    GREATER,
+    LESSEQ,
+    GREATEREQ,
+    QUESTION,
+    COLON,
+    PLUS,
+    MINUS,
+    ASTRX,
+    SLASH,
+    PRCNT
 };
 
 struct Token
@@ -49,7 +62,12 @@ struct CaretToken : Token
 
 struct ExclmToken : Token
 {
-    ExclmToken() :Token( EXCLM ) {}    
+    ExclmToken() :Token( EXCLM ) {}
+};
+
+struct ExclmEqToken : Token
+{
+    ExclmEqToken() :Token( EXCLMEQ ) {}
 };
 
 struct IntToken : Token
@@ -68,6 +86,66 @@ struct FalseToken : Token
 {
     int value;
     FalseToken() :Token( FALSE ), value( false ) {}
+};
+
+struct EqualToken : Token
+{
+    EqualToken() :Token( EQUAL ) {}
+};
+
+struct LessToken : Token
+{
+    LessToken() : Token( LESS ) {}
+};
+
+struct GreaterToken : Token
+{
+    GreaterToken() : Token( GREATER ) {}
+};
+
+struct LessEqToken : Token
+{
+    LessEqToken() : Token( LESSEQ ) {}
+};
+
+struct GreaterEqToken : Token
+{
+    GreaterEqToken() : Token( GREATEREQ ) {}
+};
+
+struct QuestionToken : Token
+{
+    QuestionToken() : Token( QUESTION ) {}
+};
+
+struct ColonToken : Token
+{
+    ColonToken() : Token( COLON ) {}
+};
+
+struct PlusToken : Token
+{
+    PlusToken() : Token( PLUS ) {}
+};
+
+struct MinusToken : Token
+{
+    MinusToken() : Token( MINUS ) {}
+};
+
+struct AstrxToken : Token
+{
+    AstrxToken() : Token( ASTRX ) {}
+};
+
+struct SlashToken : Token
+{
+    SlashToken() : Token( SLASH ) {}
+};
+
+struct PrcntToken : Token
+{
+    PrcntToken() : Token( PRCNT ) {}
 };
 
 #endif
