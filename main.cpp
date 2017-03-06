@@ -1,31 +1,37 @@
+#include <iostream>
+#include <iterator>
+#include <typeinfo>
+
 #include "expr.hpp"
 #include "astcontext.hpp"
 #include "eval.hpp"
 #include "check.hpp"
-
-#include <memory>
-#include <iostream>
+#include "lexer.hpp"
 
 int main()
 {
     ASTContext context;
 
-    std::cout << &context.boolTy << '\n';
+    std::string input;
+    std::cin >> input;
+    Lexer l ( input.begin(), input.end() );
+    l.Next();
+    // std::cout << &context.boolTy << '\n';
 
-    Expr* t = new BoolExpr( true );
-    std::cout << check( t, context ) << '\n';    
-    Expr* f = new BoolExpr( false );
-    Expr* zero = new IntExpr( 0, context );    
+    // Expr* t = new BoolExpr( true );
+    // std::cout << check( t, context ) << '\n';    
+    // Expr* f = new BoolExpr( false );
+    // Expr* zero = new IntExpr( 0, context );    
 
-    Expr* e1 = new IntExpr( 10, context );
-    Expr* e2 = new NegativeExpr( e1, context );
-    Expr* e3 = new IntExpr( 20, context );
-    Expr* e4 = new GreaterEqualExpr( e1, e2, context );
-    Expr* e5 = new GreaterEqualExpr( e1, e1, context );
+    // Expr* e1 = new IntExpr( 10, context );
+    // Expr* e2 = new NegativeExpr( e1, context );
+    // Expr* e3 = new IntExpr( 20, context );
+    // Expr* e4 = new GreaterEqualExpr( e1, e2, context );
+    // Expr* e5 = new GreaterEqualExpr( e1, e1, context );
     
-    Expr* AndEx = new AndThenExpr( t, t, context );
-    std::cout << eval( e4 ) << '\n';
-    std::cout << eval( e5 ) << '\n';    
+    // Expr* AndEx = new AndThenExpr( t, t, context );
+    // std::cout << eval( e4 ) << '\n';
+    // std::cout << eval( e5 ) << '\n';    
 	
     // Expr* e2 = new IntExpr( 10, context );
     // Expr* e3 = new AddExpr( e1, e2, context );

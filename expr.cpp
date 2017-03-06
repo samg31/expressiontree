@@ -175,8 +175,8 @@ const Type* AndThenExpr::Check( ASTContext& context )
 IntExpr::IntExpr( int val, ASTContext& context )
     :value( val )
 {
-    if( val > ( ( 1 << 31 ) - 1 ) ||
-	val < ( ( 1 >> 31 ) ) )
+    if( val >= ( ( 1 << 31 ) - 1 ) ||
+	val < ( ( 1 >> 31 ) - 1 ) )
     {
 	std::cerr << "Integer overflow exception\n";
 	assert( false );
