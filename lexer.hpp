@@ -157,6 +157,43 @@ struct Lexer
 		{
 		    Ignore();
 		}
+	    case 't':
+		Consume();
+		if( LookAhead() == 'r' )
+		{
+		    Consume();
+		    if( LookAhead() == 'u' )
+		    {
+			Consume();
+			if( LookAhead() == 'e' )
+			{
+			    Consume();
+			    return new BoolToken( true );
+			}
+			break;
+		    }
+		}
+		std::cout << "invalid token\n";
+		assert( false );
+	    case 'f':
+		Consume();
+		if( LookAhead() == 'a' )
+		{
+		    Consume();
+		    if( LookAhead() == 'l' )
+		    {
+			Consume();
+			if( LookAhead() == 's' )
+			{
+			    Consume();
+			    if( LookAhead() == 'e' )
+			    {
+				Consume();
+				return new BoolToken( false );
+			    }
+			}
+		    }
+		}
 	    case ' ':
 	    case '\t':
 	    case '\n':
