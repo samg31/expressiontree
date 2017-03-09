@@ -4,6 +4,7 @@
 #include <string>
 #include <cctype>
 #include <memory>
+#include <cassert>
 
 #include "token.hpp"
 
@@ -16,7 +17,7 @@ struct Lexer
     Lexer( std::string::iterator first, std::string::iterator last )
 	:first( first ), last( last )
     {}
-    bool Eof() const { return first == last; }
+    bool Eof() const { return (first == last); }
     char Consume()
     {
 	if( Eof() )
@@ -50,101 +51,122 @@ struct Lexer
 		    Consume();
 		} while( !Eof() && std::isdigit( LookAhead() ) );
 		int n = std::stoi( buf );
-		r = new IntToken( n );
-		std::cout << n << '\n';
+		return new IntToken( n );
 	    }
 		break;
 	    case '(':
-		r = new LParenToken;
+		Consume();
+		return new PuncToken( LPAREN );
 		break;
 	    case ')':
-		r = new RParenToken;
+		Consume();
+		return new PuncToken( RPAREN );
 		break;
 	    case '&':
+		Consume();
 		if( LookAhead() == '&' )
 		{
 		    Consume();
-		    r = new AmprsndToken;
+		    return new PuncToken( AMPRSND );
+		}
+		else
+		{
+		    std::cout << "INVALID TOKEN '&'\n";
+		    assert( true );
 		}
 		break;
 	    case '|':
+		Consume();		
 		if( LookAhead() == '|' )
 		{
 		    Consume();
-		    r = new BarToken;
+		    return new PuncToken( BAR );
 		}
 		break;
 	    case '^':
-		r = new CaretToken;
+		Consume();
+		return new PuncToken( CARET );
 		break;
 	    case '!':
+		Consume();
 		if( LookAhead() == '=' )
 		{
 		    Consume();
-		    // r = new ExclmEqToken;
+		    return new PuncToken( EXCLMEQ );
 		}
-		r = new ExclmToken;
+		return new PuncToken( EXCLM );
 		break;
 	    case '+':
-		r = new PlusToken;
+		Consume();
+		return new PuncToken( PLUS );
 		break;
 	    case '-':
-		r = new MinusToken;
+		Consume();
+		return new PuncToken( MINUS );
 		break;
 	    case '*':
-		r = new AstrxToken;
+		Consume();
+		return new PuncToken( ASTRX );
 		break;
 	    case '/':
-		r = new SlashToken;
+		Consume();
+		return new PuncToken( SLASH );
 		break;
 	    case '%':
-		r = new PrcntToken;
+		Consume();
+		return new PuncToken( PRCNT );
 		break;
 	    case '?':
-		r = new QuestionToken;
+		Consume();
+		return new PuncToken( QUESTION );
 		break;
 	    case ':':
-		r = new ColonToken;
+		Consume();
+		return new PuncToken( COLON );
 		break;
 	    case '<':
+		Consume();
 		if( LookAhead() == '=' )
 		{
 		    Consume();
-		    r = new LessEqToken;
+		    return new PuncToken( LESSEQ );
 		}
 		else
-		    r = new LessToken;
+		    return new PuncToken( LESS );
 		break;
 	    case '>':
+		Consume();
 		if( LookAhead() == '=' )
 		{
 		    Consume();
-		    r = new GreaterEqToken;
+		    return new PuncToken( GREATEREQ );
 		}
 		else
-		    r = new GreaterToken;
+		    return new PuncToken( GREATER );
 		break;
 	    case '=':
+		Consume();
 		if( LookAhead() == '=' )
 		{
 		    Consume();
-		    r = new EqualToken;
+		    return new PuncToken( EQUAL );
 		}
 		break;
 	    case '#':
 		while( LookAhead() != '\n' )
 		{
-		    Consume();
+		    Ignore();
 		}
-	    case 't':
-		break;
 	    case ' ':
 	    case '\t':
 	    case '\n':
-		Consume();
+		Ignore();
+		continue;
+	    default:
+		std::cout << "invalid token\n";
+		assert( true );
 	    }
 	}
-	return r;
     }
 };
 
