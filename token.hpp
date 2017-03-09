@@ -1,6 +1,8 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
+#include <string>
+
 enum TokenKind
 {
     EOFT,
@@ -12,8 +14,7 @@ enum TokenKind
     EXCLM,
     EXCLMEQ,    
     INT,
-    TRUE,
-    FALSE,
+    BOOL,
     EQUAL,
     LESS,
     GREATER,
@@ -32,120 +33,97 @@ struct Token
 {
     TokenKind kind;
     Token( TokenKind k ) : kind(k) {}
+    virtual std::string Kind() = 0;
+    virtual std::string Value() = 0;
     virtual ~Token() = default;
-};
-
-struct LParenToken : Token
-{
-    LParenToken() :Token( LPAREN ) {}
-};
-
-struct RParenToken : Token
-{
-    RParenToken() :Token( RPAREN ) {}
-};
-
-struct AmprsndToken : Token
-{
-    AmprsndToken() :Token( AMPRSND ) {}
-};
-
-struct BarToken : Token
-{
-    BarToken() :Token( BAR ) {}
-};
-
-struct CaretToken : Token
-{
-    CaretToken() :Token( CARET ) {}
-};
-
-struct ExclmToken : Token
-{
-    ExclmToken() :Token( EXCLM ) {}
-};
-
-struct ExclmEqToken : Token
-{
-    ExclmEqToken() :Token( EXCLMEQ ) {}
 };
 
 struct IntToken : Token
 {
     int value;
     IntToken( int value ) : Token( INT ), value( value ) {}
+    std::string Kind() { return std::string( "int" ); }
+    std::string Value() { return std::to_string( value ); }
 };
 
-struct TrueToken : Token
+struct BoolToken : Token
 {
     int value;
-    TrueToken() :Token( TRUE ), value( true ) {}
+    BoolToken( bool value ) :Token( BOOL ), value( value ) {}
+    std::string Kind() { return std::string( "bool" ); }
+    std::string Value()
+    {
+	return (value) ? std::string("true") : std::string("false");
+    }
 };
 
-struct FalseToken : Token
+struct PuncToken : Token
 {
-    int value;
-    FalseToken() :Token( FALSE ), value( false ) {}
-};
-
-struct EqualToken : Token
-{
-    EqualToken() :Token( EQUAL ) {}
-};
-
-struct LessToken : Token
-{
-    LessToken() : Token( LESS ) {}
-};
-
-struct GreaterToken : Token
-{
-    GreaterToken() : Token( GREATER ) {}
-};
-
-struct LessEqToken : Token
-{
-    LessEqToken() : Token( LESSEQ ) {}
-};
-
-struct GreaterEqToken : Token
-{
-    GreaterEqToken() : Token( GREATEREQ ) {}
-};
-
-struct QuestionToken : Token
-{
-    QuestionToken() : Token( QUESTION ) {}
-};
-
-struct ColonToken : Token
-{
-    ColonToken() : Token( COLON ) {}
-};
-
-struct PlusToken : Token
-{
-    PlusToken() : Token( PLUS ) {}
-};
-
-struct MinusToken : Token
-{
-    MinusToken() : Token( MINUS ) {}
-};
-
-struct AstrxToken : Token
-{
-    AstrxToken() : Token( ASTRX ) {}
-};
-
-struct SlashToken : Token
-{
-    SlashToken() : Token( SLASH ) {}
-};
-
-struct PrcntToken : Token
-{
-    PrcntToken() : Token( PRCNT ) {}
+    PuncToken( TokenKind k ) : Token( k ) {}
+    std::string Value() { return std::string("no value"); }
+    std::string Kind()
+    {
+	switch( kind )
+	{
+	case LPAREN:
+	    return std::string( "lparen" );
+	    break;
+	case RPAREN:
+	    return std::string( "rparen" );
+	    break;
+	case AMPRSND:
+	    return std::string( "amprsnd" );
+	    break;
+	case BAR:
+	    return std::string( "bar" );
+	    break;
+	case CARET:
+	    return std::string( "caret" );
+	    break;
+	case EXCLM:
+	    return std::string( "exclamation" );
+	    break;
+	case EXCLMEQ:
+	    return std::string( "not equals" );
+	    break;
+	case EQUAL:
+	    return std::string( "equals" );
+	    break;
+	case LESS:
+	    return std::string( "less than" );
+	    break;
+	case GREATER:
+	    return std::string( "greater than" );
+	    break;
+	case LESSEQ:
+	    return std::string( "less than or equal" );
+	    break;
+	case GREATEREQ:
+	    return std::string( "greater than or equal" );
+	    break;
+	case QUESTION:
+	    return std::string( "question" );
+	    break;
+	case COLON:
+	    return std::string( "colon" );
+	    break;
+	case PLUS:
+	    return std::string( "plus" );
+	    break;
+	case MINUS:
+	    return std::string( "minus" );
+	    break;
+	case ASTRX:
+	    return std::string( "asterix" );
+	    break;
+	case SLASH:
+	    return std::string( "slash" );
+	    break;
+	case PRCNT:
+	    return std::string( "percent" );
+	    break;
+	}
+    }
 };
 
 #endif
