@@ -6,6 +6,20 @@ Expr::~Expr()
 {
 }
 
+BoolExpr::BoolExpr( int val )
+	:value( val )
+{
+}
+
+const Type* BoolExpr::Check( ASTContext& context )
+{
+	return &context.boolTy;
+}
+
+void BoolExpr::Accept( Visitor& v )
+{
+	v.visit( this );
+}
 
 AndExpr::AndExpr( Expr* lhs, Expr* rhs, ASTContext& context )
     :e1( lhs ), e2( rhs )

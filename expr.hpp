@@ -65,9 +65,9 @@ class BoolExpr : public Expr
 {
 public:    
     int value;
-    BoolExpr( int val ):value(val){}
-    const Type* Check( ASTContext& context ) override { return &context.boolTy; }
-    void Accept( Visitor& v ) { v.visit( this ); }
+    BoolExpr( int val );
+    const Type* Check( ASTContext& context ) override;
+    void Accept( Visitor& v );
 };
 
 class AndExpr : public Expr
