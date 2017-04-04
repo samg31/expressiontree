@@ -2,6 +2,7 @@
 #define TOKEN_HPP
 
 #include <string>
+#include <map>
 
 enum TokenKind
 {

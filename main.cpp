@@ -8,31 +8,27 @@
 #include "eval.hpp"
 #include "check.hpp"
 #include "lexer.hpp"
+#include "parser.hpp"
 
 int main()
 {
-    ASTContext context;
-    std::vector<Token*> Tokens;
+	ASTContext context;
+	std::vector<Token*> Tokens;
 
-    std::string input;
-    std::string line;
-    while (getline(std::cin, line))
-    {
-	input += '\n' + line;
-    }
-    std::cout << input << std::endl;
-    Lexer l ( input.begin(), input.end() );
-    
-    while( !l.Eof() )
-    {
-    	Tokens.push_back( l.Next() );
-    }
-    
-    for( auto& t : Tokens )
-    {
-    	std::cout << t->Kind() << ' ' <<
-	    t->Value() << '\n';
-    }
+	std::string input;
+	std::string line;
+	getline(std::cin, line);
+	input += line + '\n';
+	Lexer l ( input.begin(), input.end() );
 
-    return 0;
+	Parser p( l, context );
+	Expr* e = p.Expression();
+	std::cout << eval( e ) << std::endl;
+
+	// for( auto& t : Tokens )		
+    // {
+	// 	std::cout << t->Kind() << ' ' << t->Value() << '\n';
+	// }
+
+	return 0;
 }

@@ -5,6 +5,7 @@
 #include <cctype>
 #include <memory>
 #include <cassert>
+#include <iostream>
 
 #include "token.hpp"
 
@@ -17,7 +18,7 @@ struct Lexer
     Lexer( std::string::iterator first, std::string::iterator last )
 	:first( first ), last( last )
     {}
-    bool Eof() const { return (first == last); }
+    bool Eof() const { return (first == (last - 1)); }
     char Consume()
     {
 	if( Eof() )
@@ -51,7 +52,8 @@ struct Lexer
 		    Consume();
 		} while( !Eof() && std::isdigit( LookAhead() ) );
 		int n = std::stoi( buf );
-		return new IntToken( n );
+		Token* t = new IntToken( n );
+		return t;
 	    }
 		break;
 	    case '(':
@@ -201,7 +203,7 @@ struct Lexer
 		continue;
 	    default:
 		std::cout << "invalid token\n";
-		assert( true );
+		return nullptr;
 	    }
 	}
     }
