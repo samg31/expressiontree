@@ -15,20 +15,20 @@ int main()
 	ASTContext context;
 	std::vector<Token*> Tokens;
 
-	std::string input;
-	std::string line;
-	getline(std::cin, line);
-	input += line + '\n';
-	Lexer l ( input.begin(), input.end() );
+	bool quit = false;
 
-	Parser p( l, context );
-	Expr* e = p.Expression();
-	std::cout << eval( e ) << std::endl;
+	while( !quit )
+	{
+		std::string input;
+		std::string line;
+		getline(std::cin, line);
+		input += line + '\n';
+		Lexer l ( input.begin(), input.end() );
 
-	// for( auto& t : Tokens )		
-    // {
-	// 	std::cout << t->Kind() << ' ' << t->Value() << '\n';
-	// }
+		Parser p( l, context );
+		Expr* e = p.Expression();
+		std::cout << eval( e ) << std::endl;
+	}
 
 	return 0;
 }
