@@ -187,7 +187,7 @@ Expr* Parser::UnaryExpression()
 
 Expr* Parser::OrderingExpression()
 {
-	Expr* ast_1 = PrimaryExpression();
+	Expr* ast_1 = AdditiveExpression();
 	while( true )
 	{
 		if( MatchIf( LESS ) )
