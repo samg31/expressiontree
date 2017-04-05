@@ -2,7 +2,7 @@
 #define TOKEN_HPP
 
 #include <string>
-#include <map>
+#include <unordered_map>
 
 enum TokenKind
 {
@@ -28,6 +28,16 @@ enum TokenKind
     ASTRX,
     SLASH,
     PRCNT
+};
+
+class keyword_table : public std::unordered_map<std::string, TokenKind>
+{
+public:
+	keyword_table()
+	{
+		insert( { "true", BOOL } );
+		insert( { "false", BOOL } );
+	}	
 };
 
 inline std::string tk_string( TokenKind tk )

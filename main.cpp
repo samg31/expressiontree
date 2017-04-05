@@ -14,6 +14,7 @@ int main()
 {
 	ASTContext context;
 	std::vector<Token*> Tokens;
+	keyword_table kw;
 
 	bool quit = false;
 
@@ -23,7 +24,7 @@ int main()
 		std::string line;
 		getline(std::cin, line);
 		input += line + '\n';
-		Lexer l ( input.begin(), input.end() );
+		Lexer l ( input.begin(), input.end(), kw );
 
 		Parser p( l, context );
 		Expr* e = p.Expression();

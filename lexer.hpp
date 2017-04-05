@@ -13,10 +13,11 @@ struct Lexer
 {
     std::string::iterator first;
     std::string::iterator last;
+	keyword_table& kw;
     
     std::string buf;
-    Lexer( std::string::iterator first, std::string::iterator last )
-	:first( first ), last( last )
+    Lexer( std::string::iterator first, std::string::iterator last, keyword_table& kw )
+		:first( first ), last( last ), kw( kw )
     {}
     bool Eof() const { return (first == (last)); }
     char Consume()
@@ -159,54 +160,32 @@ struct Lexer
 		{
 		    Ignore();
 		}
-	    case 't':
-		Consume();
-		if( LookAhead() == 'r' )
-		{
-		    Consume();
-		    if( LookAhead() == 'u' )
-		    {
-			Consume();
-			if( LookAhead() == 'e' )
-			{
-			    Consume();
-			    return new BoolToken( true );
-			}
-		    }
-		}
-		else
-		{
-			std::cout << "invalid token\n";
-			assert( false );
-		}
-		break;
-	    case 'f':
-		Consume();
-		if( LookAhead() == 'a' )
-		{
-		    Consume();
-		    if( LookAhead() == 'l' )
-		    {
-			Consume();
-			if( LookAhead() == 's' )
-			{
-			    Consume();
-			    if( LookAhead() == 'e' )
-			    {
-				Consume();
-				return new BoolToken( false );
-			    }
-			}
-		    }
-		}
-		break;
 	    case ' ':
 	    case '\t':
 	    case '\n':
 		Ignore();
 		continue;
 	    default:
-		std::cout << "invalid token\n";
+			if( std::isalpha( LookAhead() ) )
+			{				
+				do
+				{
+					Consume();
+				} while( std::isalpha( LookAhead() ) || std::isdigit( LookAhead() ) );
+
+				auto iter = kw.find( buf );
+
+				if( iter->first == "true" )
+					return new BoolToken( true );
+				else if( iter->first == "false" )
+					return new BoolToken( false );
+				else
+				{
+					std::cerr << "invalid token\n";
+					return nullptr;
+				}
+			}
+		std::cerr << "invalid token\n";
 		return nullptr;
 	    }
 	}
