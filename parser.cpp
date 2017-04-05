@@ -2,7 +2,7 @@
 #include <iostream>
 
 Parser::Parser( Lexer l, ASTContext& cxt )
-	:lexer( l ), cxt( cxt )
+	:lexer( l ), cxt( cxt ), sema( Translator( cxt ) )
 {
 	if( Token* token = lexer.Next() )
 		tokens.push_front( token );
@@ -33,7 +33,6 @@ Token* Parser::Consume()
 		if( Token* next = lexer.Next() )
 			tokens.push_front( next );
 	}
-
 	return token;
 }
 
@@ -65,12 +64,12 @@ Expr* Parser::AdditiveExpression()
 		if( MatchIf( PLUS ) )
 		{
 			Expr* ast_2 = MultiplicativeExpression();
-			ast_1 = new AddExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_add( ast_1, ast_2 );
 		}
 		else if( MatchIf( MINUS ) )
 		{
 			Expr* ast_2 = MultiplicativeExpression();
-			ast_1 = new SubtrExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_sub( ast_1, ast_2 );
 		}
 		else break;
 	}
@@ -79,23 +78,23 @@ Expr* Parser::AdditiveExpression()
 
 Expr* Parser::MultiplicativeExpression()
 {
-	Expr* ast_1 = PrimaryExpression();
+	Expr* ast_1 = UnaryExpression();
 	while( true )
 	{
 		if( MatchIf( ASTRX ) )
 		{
 		    Expr* ast_2 = UnaryExpression();
-			ast_1 = new MulExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_mul( ast_1, ast_2 );
 		}
 		else if( MatchIf( SLASH ) )
 		{
 		    Expr* ast_2 = UnaryExpression();
-			ast_1 = new DivExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_div( ast_1, ast_2 );
 		}
 		else if( MatchIf( PRCNT ) )
 		{
 		    Expr* ast_2 = UnaryExpression();
-			ast_1 = new RemExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_rem( ast_1, ast_2 );
 		}		
 		else break;
 	}
@@ -112,7 +111,7 @@ Expr* Parser::ConditionalExpression()
 			Expr* ast_2 = Expression();
 			Match( COLON );
 			Expr* ast_3 = Expression();
-			ast_1 = new ConditionalExpr( ast_1, ast_2, ast_3, cxt );
+			ast_1 = sema.on_cond( ast_1, ast_2, ast_3 );
 		}
 		else break;
 	}
@@ -127,7 +126,7 @@ Expr* Parser::LogicalOrExpression()
 		if( MatchIf( BAR ) )
 		{
 			Expr* ast_2 = LogicalAndExpression();
-			ast_1 = new OrExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_or( ast_1, ast_2 );
 		}
 		else break;
 	}
@@ -142,7 +141,7 @@ Expr* Parser::LogicalAndExpression()
 		if( MatchIf( AMPRSND ) )
 		{
 			Expr* ast_2 = EqualityExpression();
-			ast_1 = new AndExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_and( ast_1, ast_2 );
 		}
 		else break;
 	}
@@ -157,12 +156,12 @@ Expr* Parser::EqualityExpression()
 		if( MatchIf( EQUAL ) )
 		{
 			Expr* ast_2 = OrderingExpression();
-			ast_1 = new EqualExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_equal( ast_1, ast_2 );
 		}
 		else if( MatchIf( EXCLMEQ ) )
 		{
 			Expr* ast_2 = OrderingExpression();
-			ast_1 = new NotEqualExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_inequal( ast_1, ast_2 );
 		}
 		else break;
 	}
@@ -174,12 +173,12 @@ Expr* Parser::UnaryExpression()
 	if( MatchIf( MINUS ) )
 	{
 		Expr* ast_1 = UnaryExpression();
-		return new NegativeExpr( ast_1, cxt );
+		return sema.on_neg( ast_1 );
 	}
 	else if( MatchIf( EXCLM ) )
 	{
 		Expr* ast_1 = UnaryExpression();
-		return new NotExpr( ast_1, cxt );
+		return sema.on_not( ast_1 );
 	}
 	else
 		return PrimaryExpression();
@@ -193,22 +192,22 @@ Expr* Parser::OrderingExpression()
 		if( MatchIf( LESS ) )
 		{
 			Expr* ast_2 = AdditiveExpression();
-			ast_1 = new LessExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_less( ast_1, ast_2 );
 		}
 		else if( MatchIf( GREATER ) )
 		{
 			Expr* ast_2 = AdditiveExpression();
-			ast_1 = new GreaterExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_greater( ast_1, ast_2 );
 		}
 		else if( MatchIf( LESSEQ ) )
 		{
 			Expr* ast_2 = AdditiveExpression();
-			ast_1 = new LessEqualExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_lesseq( ast_1, ast_2 );
 		}
 		else if( MatchIf( GREATEREQ ) )
 		{
 			Expr* ast_2 = AdditiveExpression();
-			ast_1 = new GreaterEqualExpr( ast_1, ast_2, cxt );
+			ast_1 = sema.on_greatereq( ast_1, ast_2 );
 		}
 		else break;
 	}

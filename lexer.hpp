@@ -18,7 +18,7 @@ struct Lexer
     Lexer( std::string::iterator first, std::string::iterator last )
 	:first( first ), last( last )
     {}
-    bool Eof() const { return (first == (last - 1)); }
+    bool Eof() const { return (first == (last)); }
     char Consume()
     {
 	if( Eof() )
@@ -172,11 +172,14 @@ struct Lexer
 			    Consume();
 			    return new BoolToken( true );
 			}
-			break;
 		    }
 		}
-		std::cout << "invalid token\n";
-		assert( false );
+		else
+		{
+			std::cout << "invalid token\n";
+			assert( false );
+		}
+		break;
 	    case 'f':
 		Consume();
 		if( LookAhead() == 'a' )
@@ -196,6 +199,7 @@ struct Lexer
 			}
 		    }
 		}
+		break;
 	    case ' ':
 	    case '\t':
 	    case '\n':
@@ -206,6 +210,7 @@ struct Lexer
 		return nullptr;
 	    }
 	}
+	return nullptr;
     }
 };
 

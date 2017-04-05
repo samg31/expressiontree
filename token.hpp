@@ -30,6 +30,79 @@ enum TokenKind
     PRCNT
 };
 
+inline std::string tk_string( TokenKind tk )
+{
+	switch( tk )
+	{
+    case EOFT:
+		return "EOFT";
+		break;
+    case LPAREN:
+		return "LPAREN";
+		break;
+    case RPAREN:
+		return "RPAREN";
+		break;
+    case AMPRSND:
+		return "AMPRSND";
+		break;
+    case BAR:
+		return "BAR";
+		break;
+    case CARET:
+		return "CARET";
+		break;
+    case EXCLM:
+		return "EXCLM";
+		break;
+    case EXCLMEQ:
+		return "EXCLMEQ";
+		break;
+    case INT:
+		return "INT";
+		break;
+    case BOOL:
+		return "BOOL";
+		break;
+    case EQUAL:
+		return "EQUAL";
+		break;
+    case LESS:
+		return "LESS";
+		break;
+    case GREATER:
+		return "GREATER";
+		break;
+    case LESSEQ:
+		return "LESSEQ";
+		break;
+    case GREATEREQ:
+		return "GREATEREQ";
+		break;
+    case QUESTION:
+		return "QUESTION";
+		break;
+    case COLON:
+		return "COLON";
+		break;
+    case PLUS:
+		return "PLUS";
+		break;
+    case MINUS:
+		return "MINUS";
+		break;
+    case ASTRX:
+		return "ASTRX";
+		break;
+    case SLASH:
+		return "SLASH";
+		break;
+    case PRCNT:
+		return "PRCNT";
+		break;
+	}
+}
+
 struct Token
 {
     TokenKind kind;
