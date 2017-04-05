@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <cassert>
 
 enum TokenKind
 {
@@ -15,7 +16,8 @@ enum TokenKind
     EXCLM,
     EXCLMEQ,    
     INT,
-    BOOL,
+    TRUE,
+	FALSE,
     EQUAL,
     LESS,
     GREATER,
@@ -35,8 +37,8 @@ class keyword_table : public std::unordered_map<std::string, TokenKind>
 public:
 	keyword_table()
 	{
-		insert( { "true", BOOL } );
-		insert( { "false", BOOL } );
+		insert( { "true", TRUE } );
+		insert( { "false", FALSE } );
 	}	
 };
 
@@ -71,8 +73,11 @@ inline std::string tk_string( TokenKind tk )
     case INT:
 		return "INT";
 		break;
-    case BOOL:
-		return "BOOL";
+    case TRUE:
+		return "TRUE";
+		break;
+	case FALSE:
+		return "FALSE";
 		break;
     case EQUAL:
 		return "EQUAL";
@@ -133,7 +138,11 @@ struct IntToken : Token
 struct BoolToken : Token
 {
     int value;
-    BoolToken( bool value ) :Token( BOOL ), value( value ) {}
+    BoolToken( TokenKind tk ) :Token( tk )
+	{
+		assert( tk == TRUE || tk == FALSE );
+		value = ( tk == TRUE ) ? true : false;
+	}
     std::string Kind() { return std::string( "bool" ); }
     std::string Value()
     {

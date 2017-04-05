@@ -175,10 +175,10 @@ struct Lexer
 
 				auto iter = kw.find( buf );
 
-				if( iter->first == "true" )
-					return new BoolToken( true );
-				else if( iter->first == "false" )
-					return new BoolToken( false );
+				if( iter != kw.end() )
+				{
+					return new BoolToken( iter->second );
+				}
 				else
 				{
 					std::cerr << "invalid token\n";
