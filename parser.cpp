@@ -225,7 +225,8 @@ Expr* Parser::PrimaryExpression()
 		return new IntExpr( next->value, cxt );
 		break;
 	}
-	case BOOL:
+	case TRUE_KW:
+	case FALSE_KW:
 	{
 		BoolToken* next = static_cast<BoolToken*>( Consume() );
 		return new BoolExpr( next->value );
@@ -238,5 +239,73 @@ Expr* Parser::PrimaryExpression()
 		Match( RPAREN );
 		return e;
 	}
+	}
+}
+
+// STATEMENT PARSING
+
+stmt* Parser::Statement()
+{
+	switch( Lookahead() )
+	{
+	case VAR_KW:
+		return DeclarationStatement();
+	default:
+		return ExpressionStatement();
+	}
+}
+
+stmt* Parser::DeclarationStatement()
+{
+	decl* d = Declaration();
+	return sema.on_decl_stmt( d );
+}
+
+stmt* Parser::ExpressionStatement()
+{
+	Expr* e = Expression();
+	Match( SEMICOLON );
+	return sema.on_expr_stmt( e );
+}
+
+decl* Parser::Declaration()
+{
+	switch( Lookahead() )
+	{
+	case VAR_KW:
+		return VariableDeclaration();
+	}
+	throw std::runtime_error( "Unexpected declaration\n" );
+}
+
+decl* Parser::VariableDeclaration()
+{
+	Consume();
+	const Type* t = TypeSpecifier();	
+	symbol* n = Identifier();
+	decl* var = sema.on_var_decl( t, n );
+	Match( ASSIGN );
+	Expr* e = Expression();
+	sema.on_var_compl( var, e );
+	Match( SEMICOLON );
+	return var;
+}
+
+symbol* Parser::Identifier()
+{
+	Token* id = Match( ID );
+	return sema.on_id( id );
+}
+
+const Type* Parser::TypeSpecifier()
+{
+	switch( Lookahead() )
+	{
+	case BOOL_KW:
+		Consume();
+		return sema.on_bool_type();
+	case INT_KW:
+		Consume();
+		return sema.on_int_type();
 	}
 }

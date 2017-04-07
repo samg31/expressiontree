@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include <cassert>
+#include "symbol.hpp"
 
 enum TokenKind
 {
@@ -16,20 +17,26 @@ enum TokenKind
     EXCLM,
     EXCLMEQ,    
     INT,
-    TRUE,
-	FALSE,
+	ASSIGN,
     EQUAL,
     LESS,
     GREATER,
     LESSEQ,
     GREATEREQ,
     QUESTION,
+	SEMICOLON,
     COLON,
     PLUS,
     MINUS,
     ASTRX,
     SLASH,
-    PRCNT
+    PRCNT,
+	ID,
+	TRUE_KW,
+	FALSE_KW,
+	VAR_KW,
+	INT_KW,
+	BOOL_KW,
 };
 
 class keyword_table : public std::unordered_map<std::string, TokenKind>
@@ -37,8 +44,11 @@ class keyword_table : public std::unordered_map<std::string, TokenKind>
 public:
 	keyword_table()
 	{
-		insert( { "true", TRUE } );
-		insert( { "false", FALSE } );
+		insert( { "true", TRUE_KW } );
+		insert( { "false", FALSE_KW } );
+		insert( { "var", VAR_KW } );
+		insert( { "int", INT_KW } );
+		insert( { "bool", BOOL_KW } );
 	}	
 };
 
@@ -73,11 +83,11 @@ inline std::string tk_string( TokenKind tk )
     case INT:
 		return "INT";
 		break;
-    case TRUE:
-		return "TRUE";
+    case TRUE_KW:
+		return "TRUE_KW";
 		break;
-	case FALSE:
-		return "FALSE";
+	case FALSE_KW:
+		return "FALSE_KW";
 		break;
     case EQUAL:
 		return "EQUAL";
@@ -96,6 +106,9 @@ inline std::string tk_string( TokenKind tk )
 		break;
     case QUESTION:
 		return "QUESTION";
+		break;
+	case SEMICOLON:
+		return "SEMICOLON";
 		break;
     case COLON:
 		return "COLON";
@@ -140,8 +153,8 @@ struct BoolToken : Token
     int value;
     BoolToken( TokenKind tk ) :Token( tk )
 	{
-		assert( tk == TRUE || tk == FALSE );
-		value = ( tk == TRUE ) ? true : false;
+		assert( tk == TRUE_KW || tk == FALSE_KW );
+		value = ( tk == TRUE_KW ) ? true : false;
 	}
     std::string Kind() { return std::string( "bool" ); }
     std::string Value()
@@ -217,6 +230,15 @@ struct PuncToken : Token
 	    break;
 	}
     }
+};
+
+struct IdToken : Token
+{
+	symbol* name;
+	IdToken( symbol* name ) : Token( ID ), name(name) {}
+    virtual std::string Kind() {}
+    virtual std::string Value() {}
+	
 };
 
 #endif

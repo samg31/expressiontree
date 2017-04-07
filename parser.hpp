@@ -7,6 +7,10 @@
 #include "astcontext.hpp"
 #include "token.hpp"
 #include "expr.hpp"
+#include "type.hpp"
+#include "translator.hpp"
+#include "stmt.hpp"
+#include "decl.hpp"
 
 struct Parser
 {
@@ -26,9 +30,21 @@ struct Parser
 	Expr* UnaryExpression();	
 	Expr* PrimaryExpression();
 
+	stmt* Statement();
+	stmt* DeclarationStatement();
+	stmt* ExpressionStatement();
+
+	decl* Declaration();
+	decl* VariableDeclaration();
+
+	const Type* TypeSpecifier();
+
+	symbol* Identifier();
+	
 	Lexer lexer;
 	ASTContext& cxt;
 	std::deque<Token*> tokens;
+	Translator sema;
 };
 
 #endif

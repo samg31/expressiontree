@@ -212,8 +212,8 @@ NegativeExpr::NegativeExpr( Expr* ex, ASTContext& context )
 {
     if( ex->Check( context ) != &context.intTy )
     {
-	std::cerr << "Negation of non-int type\n";
-	assert( false );
+		std::cerr << "Negation of non-int type\n";
+		assert( false );
     }
 }
 

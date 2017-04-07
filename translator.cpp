@@ -259,3 +259,43 @@ Expr* Translator::on_not( Expr* ast_1 )
 	}
 	return new NotExpr( ast_1, cxt );
 }
+
+stmt* Translator::on_decl_stmt( decl* d )
+{
+	return new decl_stmt( d );
+}
+
+stmt* Translator::on_expr_stmt( Expr* e )
+{
+	return new expr_stmt( e );
+}
+
+decl* Translator::on_var_decl( const Type* t, symbol* n )
+{
+	var_decl* var = new var_decl( n, t );
+	// add the declaration of n as a variable
+	return var;
+}
+
+decl* Translator::on_var_compl( decl* d, Expr* e )
+{
+	var_decl* var = static_cast<var_decl*>( d );
+	var->set_init( e );
+	return var;
+}
+
+const Type* Translator::on_bool_type() const
+{
+	return &cxt.boolTy;
+}
+
+const Type* Translator::on_int_type() const
+{
+	return &cxt.intTy;
+}
+
+symbol* Translator::on_id( Token* t )
+{
+	IdToken* id = dynamic_cast<IdToken*>( t );
+	return id->name;
+}

@@ -4,6 +4,10 @@
 #include "expr.hpp"
 #include "astcontext.hpp"
 #include "token.hpp"
+#include "stmt.hpp"
+#include "decl.hpp"
+#include "symbol.hpp"
+#include "type.hpp"
 
 class Translator
 {
@@ -32,6 +36,17 @@ public:
 	
 	Expr* on_bool( BoolToken* );
 	Expr* on_int( IntToken* );
+
+	stmt* on_decl_stmt( decl* );
+	stmt* on_expr_stmt( Expr* );
+
+	decl* on_var_decl( const Type*, symbol* );
+	decl* on_var_compl( decl*, Expr* );
+
+	const Type* on_bool_type() const;
+	const Type* on_int_type() const;
+
+	symbol* on_id( Token* t );
 };
 
 #endif

@@ -24,6 +24,7 @@ class LessExpr;
 class GreaterExpr;
 class LessEqualExpr;
 class GreaterEqualExpr;
+class IdExpr;
 
 class Expr
 {
@@ -289,6 +290,10 @@ public:
     void Accept( Visitor& v );
     const Type* Check( ASTContext& context ) override;
 };
-    
+
+class IdExpr : public Expr
+{
+};
+
 #endif
 
